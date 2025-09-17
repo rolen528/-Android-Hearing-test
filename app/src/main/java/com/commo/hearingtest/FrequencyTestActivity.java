@@ -91,70 +91,96 @@ public class FrequencyTestActivity extends AppCompatActivity {
     }
 
     private void initializeAudio() {
-        audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
-        
-        int sampleRate = 44100;
-        int channelConfig = AudioFormat.CHANNEL_OUT_STEREO;
-        int audioFormat = AudioFormat.ENCODING_PCM_16BIT;
-        int bufferSize = AudioTrack.getMinBufferSize(sampleRate, channelConfig, audioFormat);
+        try {
+            audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
+            
+            int sampleRate = 44100;
+            int channelConfig = AudioFormat.CHANNEL_OUT_STEREO;
+            int audioFormat = AudioFormat.ENCODING_PCM_16BIT;
+            int bufferSize = AudioTrack.getMinBufferSize(sampleRate, channelConfig, audioFormat);
 
-        AudioAttributes audioAttributes = new AudioAttributes.Builder()
-                .setUsage(AudioAttributes.USAGE_MEDIA)
-                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                .build();
+            AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_MEDIA)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                    .build();
 
-        audioTrack = new AudioTrack(audioAttributes,
-                new AudioFormat.Builder()
-                        .setSampleRate(sampleRate)
-                        .setChannelMask(channelConfig)
-                        .setEncoding(audioFormat)
-                        .build(),
-                bufferSize,
-                AudioTrack.MODE_STREAM,
-                AudioManager.AUDIO_SESSION_ID_GENERATE);
+            audioTrack = new AudioTrack(audioAttributes,
+                    new AudioFormat.Builder()
+                            .setSampleRate(sampleRate)
+                            .setChannelMask(channelConfig)
+                            .setEncoding(audioFormat)
+                            .build(),
+                    bufferSize,
+                    AudioTrack.MODE_STREAM,
+                    AudioManager.AUDIO_SESSION_ID_GENERATE);
+        } catch (Exception e) {
+            Toast.makeText(this, "오디오 초기화 오류: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void setupClickListeners() {
-        btnStartTest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startTest();
-            }
-        });
+        if (btnStartTest != null) {
+            btnStartTest.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (FrequencyTestActivity.this != null) {
+                        startTest();
+                    }
+                }
+            });
+        }
 
-        btnPlaySound.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                playCurrentFrequency();
-            }
-        });
+        if (btnPlaySound != null) {
+            btnPlaySound.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (FrequencyTestActivity.this != null) {
+                        playCurrentFrequency();
+                    }
+                }
+            });
+        }
 
-        btnCannotHear.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleResponse(0); // Cannot hear
-            }
-        });
+        if (btnCannotHear != null) {
+            btnCannotHear.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (FrequencyTestActivity.this != null) {
+                        handleResponse(0); // Cannot hear
+                    }
+                }
+            });
+        }
 
-        btnHearFaintly.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleResponse(1); // Hear faintly
-            }
-        });
+        if (btnHearFaintly != null) {
+            btnHearFaintly.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (FrequencyTestActivity.this != null) {
+                        handleResponse(1); // Hear faintly
+                    }
+                }
+            });
+        }
 
-        btnHearClearly.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleResponse(2); // Hear clearly
-            }
-        });
+        if (btnHearClearly != null) {
+            btnHearClearly.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (FrequencyTestActivity.this != null) {
+                        handleResponse(2); // Hear clearly
+                    }
+                }
+            });
+        }
     }
 
     private void startTest() {
         isTestRunning = true;
         currentFrequencyIndex = 0;
-        currentFrequency = testFrequencies[currentFrequencyIndex];
+        if (testFrequencies != null && testFrequencies.length > 0) {
+            currentFrequency = testFrequencies[currentFrequencyIndex];
+        }
         lowestHeardFrequency = -1;
         optimalFrequency = -1;
         
@@ -163,12 +189,16 @@ public class FrequencyTestActivity extends AppCompatActivity {
     }
 
     private void nextFrequency() {
-        if (currentFrequencyIndex < testFrequencies.length) {
+        if (testFrequencies != null && currentFrequencyIndex < testFrequencies.length) {
             currentFrequency = testFrequencies[currentFrequencyIndex];
-            tvInstructions.setText("현재 주파수: " + currentFrequency + "Hz\n" +
-                    "소리 재생 버튼을 눌러 테스트음을 들어보세요.\n" +
-                    "아래 버튼 중 해당하는 것을 선택하세요.");
-            tvCurrentFrequency.setText(currentFrequency + " Hz");
+            if (tvInstructions != null) {
+                tvInstructions.setText("현재 주파수: " + currentFrequency + "Hz\n" +
+                        "소리 재생 버튼을 눌러 테스트음을 들어보세요.\n" +
+                        "아래 버튼 중 해당하는 것을 선택하세요.");
+            }
+            if (tvCurrentFrequency != null) {
+                tvCurrentFrequency.setText(currentFrequency + " Hz");
+            }
             playCurrentFrequency();
         } else {
             finishTest();
@@ -179,14 +209,20 @@ public class FrequencyTestActivity extends AppCompatActivity {
     private void playCurrentFrequency() {
         if (audioTrack == null) return;
 
-        // Generate test tone at current frequency
-        int duration = 2000; // 2 seconds
-        int sampleRate = 44100;
-        
-        short[] buffer = generateTone(currentFrequency, duration, sampleRate);
-        
-        audioTrack.write(buffer, 0, buffer.length);
-        audioTrack.play();
+        try {
+            // Generate test tone at current frequency
+            int duration = 2000; // 2 seconds
+            int sampleRate = 44100;
+            
+            short[] buffer = generateTone(currentFrequency, duration, sampleRate);
+            
+            if (buffer != null) {
+                audioTrack.write(buffer, 0, buffer.length);
+                audioTrack.play();
+            }
+        } catch (Exception e) {
+            Toast.makeText(this, "소리 재생 오류: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     private short[] generateTone(int frequency, int duration, int sampleRate) {
@@ -209,7 +245,7 @@ public class FrequencyTestActivity extends AppCompatActivity {
     }
 
     private void handleResponse(int response) {
-        if (!isTestRunning) return;
+        if (!isTestRunning || testFrequencies == null) return;
 
         // Record responses for analysis
         switch (response) {
@@ -281,22 +317,26 @@ public class FrequencyTestActivity extends AppCompatActivity {
 
     private void updateUI() {
         if (isTestRunning) {
-            btnStartTest.setVisibility(View.GONE);
-            btnPlaySound.setVisibility(View.VISIBLE);
-            btnCannotHear.setVisibility(View.VISIBLE);
-            btnHearFaintly.setVisibility(View.VISIBLE);
-            btnHearClearly.setVisibility(View.VISIBLE);
-            tvProgress.setText("진행률: " + (currentFrequencyIndex + 1) + "/" + testFrequencies.length);
-            tvCurrentFrequency.setVisibility(View.VISIBLE);
+            if (btnStartTest != null) btnStartTest.setVisibility(View.GONE);
+            if (btnPlaySound != null) btnPlaySound.setVisibility(View.VISIBLE);
+            if (btnCannotHear != null) btnCannotHear.setVisibility(View.VISIBLE);
+            if (btnHearFaintly != null) btnHearFaintly.setVisibility(View.VISIBLE);
+            if (btnHearClearly != null) btnHearClearly.setVisibility(View.VISIBLE);
+            if (tvProgress != null && testFrequencies != null) {
+                tvProgress.setText("진행률: " + (currentFrequencyIndex + 1) + "/" + testFrequencies.length);
+            }
+            if (tvCurrentFrequency != null) tvCurrentFrequency.setVisibility(View.VISIBLE);
         } else {
-            btnStartTest.setVisibility(View.VISIBLE);
-            btnPlaySound.setVisibility(View.GONE);
-            btnCannotHear.setVisibility(View.GONE);
-            btnHearFaintly.setVisibility(View.GONE);
-            btnHearClearly.setVisibility(View.GONE);
-            tvProgress.setText("");
-            tvCurrentFrequency.setVisibility(View.GONE);
-            tvInstructions.setText("주파수 감도 테스트\n\n연령대별 평균 주파수에서 시작하여\n점차 낮은 주파수로 테스트합니다.\n\n헤드폰이나 이어폰을 착용하고 테스트를 시작하세요.");
+            if (btnStartTest != null) btnStartTest.setVisibility(View.VISIBLE);
+            if (btnPlaySound != null) btnPlaySound.setVisibility(View.GONE);
+            if (btnCannotHear != null) btnCannotHear.setVisibility(View.GONE);
+            if (btnHearFaintly != null) btnHearFaintly.setVisibility(View.GONE);
+            if (btnHearClearly != null) btnHearClearly.setVisibility(View.GONE);
+            if (tvProgress != null) tvProgress.setText("");
+            if (tvCurrentFrequency != null) tvCurrentFrequency.setVisibility(View.GONE);
+            if (tvInstructions != null) {
+                tvInstructions.setText("주파수 감도 테스트\n\n연령대별 평균 주파수에서 시작하여\n점차 낮은 주파수로 테스트합니다.\n\n헤드폰이나 이어폰을 착용하고\n시작 버튼을 누르세요.");
+            }
         }
     }
 
@@ -304,8 +344,13 @@ public class FrequencyTestActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         if (audioTrack != null) {
-            audioTrack.stop();
-            audioTrack.release();
+            try {
+                audioTrack.stop();
+                audioTrack.release();
+            } catch (Exception e) {
+                // 예외 무시
+            }
+            audioTrack = null;
         }
     }
 }
