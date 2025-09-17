@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="24dp">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="32dp"
+            android:text="테스트 결과"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textColor="@color/purple_700" />
+
+        <TextView
+            android:id="@+id/tv_test_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_title"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:textSize="18sp"
+            android:textColor="@color/teal_700" />
+
+        <LinearLayout
+            android:id="@+id/layout_results"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_test_type"
+            android:layout_marginTop="32dp"
+            android:orientation="vertical"
+            android:background="#F5F5F5"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="결과 요약"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/purple_700"
+                android:layout_marginBottom="12dp" />
+
+            <TextView
+                android:id="@+id/tv_results"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:lineSpacingExtra="4dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_analysis"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/layout_results"
+            android:layout_marginTop="24dp"
+            android:orientation="vertical"
+            android:background="#E3F2FD"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="분석 결과"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/purple_700"
+                android:layout_marginBottom="12dp" />
+
+            <TextView
+                android:id="@+id/tv_analysis"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/black"
+                android:lineSpacingExtra="4dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/layout_analysis"
+            android:layout_marginTop="32dp"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/btn_retake_test"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:padding="16dp"
+                android:text="다시 테스트"
+                android:textSize="16sp"
+                android:textColor="@color/white"
+                android:background="@color/teal_700" />
+
+            <Button
+                android:id="@+id/btn_back_to_main"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="메인으로"
+                android:textSize="16sp"
+                android:textColor="@color/white"
+                android:background="@color/purple_500" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/layout_buttons"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="24dp"
+            android:text="⚠️ 이 결과는 참고용이며 의료용 진단이 아닙니다"
+            android:textSize="12sp"
+            android:textColor="@color/purple_700"
+            android:textAlignment="center" />
+
+    </RelativeLayout>
+
+</ScrollView>
