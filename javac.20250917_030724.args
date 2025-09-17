@@ -1,0 +1,7 @@
+-cp
+/dev/null
+-Xlint:unchecked
+app/src/main/java/com/commo/hearingtest/FrequencyTestActivity.java
+app/src/main/java/com/commo/hearingtest/LeftRightTestActivity.java
+app/src/main/java/com/commo/hearingtest/MainActivity.java
+app/src/main/java/com/commo/hearingtest/TestResultActivity.java

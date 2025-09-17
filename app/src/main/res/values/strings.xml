@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">Hearing Test</string>
+    <string name="left_right_test">좌우 청력 테스트</string>
+    <string name="frequency_test">주파수 감도 테스트</string>
+    <string name="start_test">테스트 시작</string>
+    <string name="play_sound">소리 재생</string>
+    <string name="left">왼쪽</string>
+    <string name="right">오른쪽</string>
+    <string name="cannot_hear">안들림</string>
+    <string name="hear_faintly">작게들림</string>
+    <string name="hear_clearly">잘들림</string>
+    <string name="back_to_main">메인으로</string>
+    <string name="retake_test">다시 테스트</string>
+    <string name="test_result">테스트 결과</string>
+    <string name="medical_disclaimer">⚠️ 이 앱은 의료용 진단이 아닙니다</string>
 </resources>
