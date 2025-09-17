@@ -38,6 +38,10 @@ public class TestResultActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String testType = intent.getStringExtra("test_type");
         
+        if (testType == null) {
+            testType = "테스트";
+        }
+        
         tvTestType.setText(testType + " 결과");
 
         if ("좌우 청력 테스트".equals(testType)) {
@@ -89,32 +93,44 @@ public class TestResultActivity extends AppCompatActivity {
     }
 
     private void setupClickListeners() {
-        btnBackToMain.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(TestResultActivity.this, MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-                finish();
-            }
-        });
-
-        btnRetakeTest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String testType = getIntent().getStringExtra("test_type");
-                Class<?> activityClass;
-                
-                if ("좌우 청력 테스트".equals(testType)) {
-                    activityClass = LeftRightTestActivity.class;
-                } else {
-                    activityClass = FrequencyTestActivity.class;
+        if (btnBackToMain != null) {
+            btnBackToMain.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (TestResultActivity.this != null) {
+                        Intent intent = new Intent(TestResultActivity.this, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                        finish();
+                    }
                 }
-                
-                Intent intent = new Intent(TestResultActivity.this, activityClass);
-                startActivity(intent);
-                finish();
-            }
-        });
+            });
+        }
+
+        if (btnRetakeTest != null) {
+            btnRetakeTest.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (TestResultActivity.this != null) {
+                        String testType = getIntent().getStringExtra("test_type");
+                        if (testType == null) {
+                            testType = "";
+                        }
+                        
+                        Class<?> activityClass;
+                        
+                        if ("좌우 청력 테스트".equals(testType)) {
+                            activityClass = LeftRightTestActivity.class;
+                        } else {
+                            activityClass = FrequencyTestActivity.class;
+                        }
+                        
+                        Intent intent = new Intent(TestResultActivity.this, activityClass);
+                        startActivity(intent);
+                        finish();
+                    }
+                }
+            });
+        }
     }
 }
